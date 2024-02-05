@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/Loca-api")
+@RequestMapping("api/loca-api")
 @RequiredArgsConstructor
 public class LocaController {
     private final LocaService locaService;
