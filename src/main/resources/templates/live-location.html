@@ -142,7 +142,7 @@
                     map.setCenter(newLatLng);
 
                     BeforeLatLng = newLatLng;
-                    //const res = axios.post('/api/v1/Loca-api/loca', loca);
+                    //const res = axios.post('/api/loca-api/loca', loca);
                     console.log(`위도 : ${lat} , 경도 : ${lng}`)
                 }
             }
@@ -177,7 +177,7 @@
                 BeforeLatLng = point;
 
                 // 백엔드 데이터 전송
-                const res = axios.post('/api/v1/Loca-api/loca', loca);
+                //const res = axios.post('/api/loca-api/loca', loca);
                 new naver.maps.Marker({
                     map: map,
                     position: point
