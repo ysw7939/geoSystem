@@ -20,9 +20,5 @@ public class HelloController {
     public String hello() {
         return "Hello World!";
     }
-    @GetMapping("/geoLog")
-    public String list(Model model){
-        return "/geoLog";
-    }
 
 }
