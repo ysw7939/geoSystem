@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>네이버지도 스틱코드</title>
+    <style>
+        .spr_trff {
+            overflow: hidden;
+            display: inline-block;
+            color: transparent !important;
+            vertical-align: top;
+            background: url(https://ssl.pstatic.net/static/maps/m/spr_trff_v6.png) 0 0;
+            background-size: 200px 200px;
+            -webkit-background-size: 200px 200px;
+        }
+
+        .spr_ico_mylct {
+            width: 20px;
+            height: 20px;
+            margin: 7px 0 0 0;
+            background-position: -153px -31px;
+            pointer-events: auto;
+        }
+
+        .btn_mylct {
+            z-index: 100;
+            overflow: hidden;
+            display: inline-block;
+            position: absolute;
+            top: 7px;
+            left: 5px;
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(58, 70, 88, .45);
+            border-radius: 2px;
+            background: #fcfcfd;
+            text-align: center;
+            -webkit-background-clip: padding;
+            background-clip: padding-box;
+        }
+    </style>
+    <script type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=nwb45gwhxz"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+<div id="map" style="width:100%; height:800px;"></div>
+
+<script type="text/javascript">
+
+
+        // 네이버 지도를 생성합니다.
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.5665, 126.9780), // 서울 시청을 기준으로 지도 생성
+            zoom: 13
+        });
+
+        // Polyline을 저장할 변수
+        var polyline;
+        var newLatLng = new naver.maps.LatLng(37.5498027, 127.1440928);
+
+        window.onload = function () {
+            // Axios를 사용하여 서버로 GET 요청을 보냄
+            axios.get('/api/v1/Loca-api/allLocas')
+                .then(function (response) {
+                    // 요청에 대한 응답을 처리함
+                    let data = response.data;
+                    data.forEach((item) => {
+                        console.log("x: " + item.x + ", y: " + item.y);
+                        let newLoca = new naver.maps.LatLng(item.y, item.x);
+                        var path = polyline.getPath();
+                        path.push(newLoca);
+
+                        new naver.maps.Marker({
+                            map: map,
+                            position: newLoca
+                        });
+                    });
+                })
+                .catch(function (error) {
+                    // 요청이 실패한 경우의 처리
+                    console.error('Error:', error);
+                });
+        };
+
+        // 새로운 위치를 LatLng 객체로 변환합니다.
+
+
+        // 처음 위치가 업데이트되면 Polyline을 생성합니다.
+        polyline = new naver.maps.Polyline({
+            map: map,
+            path: [newLatLng],
+            strokeColor: '#FF0000',
+            strokeWeight: 3
+        });
+
+        naver.maps.Event.addListener(map, 'click', function (e) {
+            console.log("클릭")
+
+            var point = e.coord;
+            let updateFlag = true;
+            // Dto 형식에 맞춤
+            let loca = {
+                x: point.x,
+                y: point.y
+            }
+
+            var path = polyline.getPath();
+            path.push(point);
+
+
+            // 백엔드 데이터 전송
+            //const res = axios.post('/api/v1/Loca-api/loca', loca);
+            new naver.maps.Marker({
+                map: map,
+                position: point
+            });
+
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>
