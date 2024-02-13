@@ -43,10 +43,10 @@ public class SecurityConfig {
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/auth-api/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+//                .authorizeHttpRequests((authz) -> authz
+//                        .requestMatchers("/api/auth-api/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
                 .httpBasic(withDefaults());
         // jwt 인증확인 후 실행
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
